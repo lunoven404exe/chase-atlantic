@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Super Calculator</title>
+  <style>
+    :root {
+      --bg: rgba(255, 255, 255, 0.1);
+      --text: #fff;
+      --accent: #28a745;
+      --operator: #ff9500;
+      --backdrop: blur(10px);
+    }
+
+    body.light {
+      --bg: rgba(0, 0, 0, 0.05);
+      --text: #111;
+      --accent: #007bff;
+      --operator: #e08800;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 1rem;
+      transition: background 0.3s;
+    }
+
+    .calculator {
+      background: var(--bg);
+      backdrop-filter: var(--backdrop);
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 20px #000;
+      width: 320px;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s;
+    }
+
+    .display {
+      background: transparent;
+      padding: 10px 20px;
+      font-size: 2rem; 
+      text-align: right;
+      min-height: 50px;.
+      word-wrap: break-word;
+      overflow-x: auto;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 18px;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .operator { background: var(--operator); color: #fff; }
+    .equals { background: var(--accent); color: #fff; grid-column: span 2; }
+    .equals:hover { background: #1e7e34; }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .history {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      max-height: 100px;
+      overflow-y: auto;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .theme-toggle {
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      border: 1px solid var(--text);
+      border-radius: 8px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 400px) {
+      .calculator {
+        width: 100%;
+      }
+
+      button {
+        padding: 14px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator">
+    <div class="controls">
+      <button class="theme-toggle" onclick="toggleTheme()">🌗 Theme</button>
+      <button class="theme-toggle" onclick="clearHistory()">🧹 Clear History</button>
+    </div>
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="append('%')">%</button>
+      <button onclick="append('/')">÷</button>
+      <button onclick="backspace()">⌫</button>
+
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button class="operator" onclick="append('*')">×</button>
+
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button class="operator" onclick="append('-')">−</button>
+
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button class="operator" onclick="append('+')">+</button>
+
+      <button onclick="append('0')">0</button>
+      <button onclick="append('.')">.</button>
+      <button class="equals" onclick="calculate()">=</button>
+    </div>
+
+    <div id="history" class="history">
+      <strong>History:</strong><br />
+    </div>
+  </div>
+
+  <script>
+    const display = document.getElementById("display");
+    const history = document.getElementById("history");
+    let isDark = true;
+
+    function append(val) {
+      if (display.textContent === "0" && val !== ".") {
+        display.textContent = val;
+      } else {
+        display.textContent += val;
+      }
+    }
+
+    function clearDisplay() {
+      display.textContent = "0";
+    }
+
+    function backspace() {
+      const text = display.textContent;
+      display.textContent = text.length > 1 ? text.slice(0, -1) : "0";
+    }
+
+    function calculate() {
+      try {
+        const input = display.textContent.trim();
+        if (input === "1+1") {
+          const joke = "hindi magiging kayo HAHAHAHA";
+          display.textContent = joke;
+          history.innerHTML += `1+1 = <strong>${joke}</strong><br/>`;
+        } else {
+          const result = eval(input.replace('%', '/100'));
+          display.textContent = result;
+          history.innerHTML += `${input} = <strong>${result}</strong><br/>`;
+        }
+      } catch {
+        display.textContent = "Error";
+      }
+    }
+
+    function toggleTheme() {
+      isDark = !isDark;
+      document.body.classList.toggle("light", !isDark);
+    }
+
+    function clearHistory() {
+      history.innerHTML = "<strong>History:</strong><br />";
+    }
+
+    // Keyboard support
+    document.addEventListener("keydown", e => {
+      const key = e.key;
+      if (!isNaN(key) || ['+', '-', '*', '/', '.', '%'].includes(key)) {
+        append(key);
+      } else if (key === 'Enter') {
+        e.preventDefault();
+        calculate();
+      } else if (key === 'Backspace') {
+        backspace();
+      } else if (key === 'Escape') {
+        clearDisplay();
+      }
+    });
+  </script>
+
+</body>
+</html>
