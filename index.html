@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Lyrics with Music</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    #startButton {
+      padding: 16px 32px;
+      background-color: #1a1a1a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      box-shadow: 0 0 8px #444;
+    }
+
+    .lyrics {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+      padding: 2rem;
+    }
+
+    .lyrics p {
+      opacity: 0;
+      transform: translateY(20px);
+      font-size: 1.3rem;
+      animation: fadeUp 2s forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .lyrics p:nth-child(1) { animation-delay: 0s; }
+    .lyrics p:nth-child(2) { animation-delay: 3s; }
+    .lyrics p:nth-child(3) { animation-delay: 11.5s; }
+    .lyrics p:nth-child(4) { animation-delay: 19.3s; }
+    .lyrics p:nth-child(5) { animation-delay: 28.6s; }
+    .lyrics p:nth-child(6) { animation-delay: 31.9s; }
+  </style>
+</head>
+<body>
+
+  <button id="startButton">Start Music & Lyrics</button>
+
+  <audio id="song">
+    <source src="darkness.mp3" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <div class="lyrics" id="lyrics">
+    <p>I don't want to leave this place if you're not with us</p>
+    <p>(Darkness to the light, I'll be forever gracious</p>
+    <p>Grey in your eyes, your soul must be silver plated</p>
+    <p>Though we don't talk, I'll miss our conversations</p>
+    <p>I fall apart, you fill up the empty spaces)</p>
+    <p>I don't wanna leave this place if you're not with us</p>
+  </div>
+
+  <script>
+    const startButton = document.getElementById("startButton");
+    const song = document.getElementById("song");
+    const lyrics = document.getElementById("lyrics");
+
+    startButton.addEventListener("click", () => {
+      song.play();
+      lyrics.style.display = "flex";
+      startButton.style.display = "none";
+    });
+  </script>
+
+</body>
+</html>
